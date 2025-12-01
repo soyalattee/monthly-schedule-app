@@ -1,17 +1,15 @@
-"use client"
-
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ScheduleCalendarProps {
-  month: Date
-  scheduleData: Record<number, string>
-  dailyColleagues: Record<number, string[]>
-  wakeUpTimes: Record<number, string>
-  selectedDay: number | null
-  onSelectDay: (day: number | null) => void
-  getScheduleType: (code: string) => string
-  onPrevMonth: () => void
-  onNextMonth: () => void
+  month: Date;
+  scheduleData: Record<number, string>;
+  dailyColleagues: Record<number, string[]>;
+  wakeUpTimes: Record<number, string>;
+  selectedDay: number | null;
+  onSelectDay: (day: number | null) => void;
+  getScheduleType: (code: string) => string;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
 export default function ScheduleCalendar({
@@ -25,31 +23,36 @@ export default function ScheduleCalendar({
   onPrevMonth,
   onNextMonth,
 }: ScheduleCalendarProps) {
-  const year = month.getFullYear()
-  const monthNum = month.getMonth()
-  const firstDay = new Date(year, monthNum, 1).getDay()
-  const daysInMonth = new Date(year, monthNum + 1, 0).getDate()
+  const year = month.getFullYear();
+  const monthNum = month.getMonth();
+  const firstDay = new Date(year, monthNum, 1).getDay();
+  const daysInMonth = new Date(year, monthNum + 1, 0).getDate();
 
-  const weekdays = ["일", "월", "화", "수", "목", "금", "토"]
+  const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
 
   const getScheduleColor = (code: string) => {
-    const colorMap: Record<string, { bg: string; text: string; label: string }> = {
+    const colorMap: Record<
+      string,
+      { bg: string; text: string; label: string }
+    > = {
       주: { bg: "bg-blue-100", text: "text-blue-700", label: "주간" },
       야: { bg: "bg-purple-100", text: "text-purple-700", label: "야간" },
       비: { bg: "bg-amber-100", text: "text-amber-700", label: "비번" },
       휴: { bg: "bg-green-100", text: "text-green-700", label: "휴무" },
-    }
-    return colorMap[code] || { bg: "bg-gray-100", text: "text-gray-700", label: "" }
-  }
+    };
+    return (
+      colorMap[code] || { bg: "bg-gray-100", text: "text-gray-700", label: "" }
+    );
+  };
 
-  const calendarDays = []
+  const calendarDays = [];
 
   for (let i = 0; i < firstDay; i++) {
-    calendarDays.push(null)
+    calendarDays.push(null);
   }
 
   for (let day = 1; day <= daysInMonth; day++) {
-    calendarDays.push(day)
+    calendarDays.push(day);
   }
 
   return (
@@ -76,7 +79,10 @@ export default function ScheduleCalendar({
 
       <div className="grid grid-cols-7 gap-2 mb-2">
         {weekdays.map((day) => (
-          <div key={day} className="text-center font-semibold text-slate-600 py-2">
+          <div
+            key={day}
+            className="text-center font-semibold text-slate-600 py-2"
+          >
             {day}
           </div>
         ))}
@@ -85,14 +91,14 @@ export default function ScheduleCalendar({
       <div className="grid grid-cols-7 gap-2">
         {calendarDays.map((day, index) => {
           if (day === null) {
-            return <div key={`empty-${index}`} className="aspect-square" />
+            return <div key={`empty-${index}`} className="aspect-square" />;
           }
 
-          const scheduleCode = scheduleData[day]
-          const colors = scheduleCode ? getScheduleColor(scheduleCode) : {}
-          const isSelected = selectedDay === day
-          const dayColleagues = dailyColleagues[day] || []
-          const dayWakeUpTime = wakeUpTimes[day]
+          const scheduleCode = scheduleData[day];
+          const colors = scheduleCode ? getScheduleColor(scheduleCode) : {};
+          const isSelected = selectedDay === day;
+          const dayColleagues = dailyColleagues[day] || [];
+          const dayWakeUpTime = wakeUpTimes[day];
 
           return (
             <button
@@ -102,20 +108,30 @@ export default function ScheduleCalendar({
                 isSelected
                   ? "border-blue-500 bg-blue-50"
                   : scheduleCode
-                    ? `${colors.bg} border-transparent hover:border-slate-300`
-                    : "border-slate-200 bg-white hover:border-slate-300"
+                  ? `${colors.bg} border-transparent hover:border-slate-300`
+                  : "border-slate-200 bg-white hover:border-slate-300"
               }`}
             >
               <div className="h-full flex flex-col items-center justify-center gap-1">
                 <div className="text-lg font-bold text-slate-900">{day}</div>
-                {scheduleCode && <div className={`text-xs font-semibold ${colors.text}`}>{colors.label}</div>}
-                {dayWakeUpTime && <div className="text-xs text-slate-500 font-medium">🌅 {dayWakeUpTime}</div>}
+                {scheduleCode && (
+                  <div className={`text-xs font-semibold ${colors.text}`}>
+                    {colors.label}
+                  </div>
+                )}
+                {dayWakeUpTime && (
+                  <div className="text-xs text-slate-500 font-medium">
+                    🌅 {dayWakeUpTime}
+                  </div>
+                )}
                 {dayColleagues.length > 0 && (
-                  <div className="text-xs text-slate-600 truncate max-w-full">{dayColleagues.join(", ")}</div>
+                  <div className="text-xs text-slate-600 truncate max-w-full">
+                    {dayColleagues.join(", ")}
+                  </div>
                 )}
               </div>
             </button>
-          )
+          );
         })}
       </div>
 
@@ -128,7 +144,11 @@ export default function ScheduleCalendar({
           <div className="space-y-2">
             <div>
               <p className="text-sm text-slate-600">근무 상태</p>
-              <p className={`text-lg font-bold ${getScheduleColor(scheduleData[selectedDay]).text}`}>
+              <p
+                className={`text-lg font-bold ${
+                  getScheduleColor(scheduleData[selectedDay]).text
+                }`}
+              >
                 {getScheduleType(scheduleData[selectedDay])}
               </p>
             </div>
@@ -136,25 +156,33 @@ export default function ScheduleCalendar({
             {wakeUpTimes[selectedDay] && (
               <div>
                 <p className="text-sm text-slate-600">기상 시간</p>
-                <p className="text-lg font-bold text-slate-900">{wakeUpTimes[selectedDay]}</p>
+                <p className="text-lg font-bold text-slate-900">
+                  {wakeUpTimes[selectedDay]}
+                </p>
               </div>
             )}
 
-            {dailyColleagues[selectedDay] && dailyColleagues[selectedDay].length > 0 && (
-              <div>
-                <p className="text-sm text-slate-600 mb-2">함께 일하는 사람</p>
-                <div className="flex flex-wrap gap-2">
-                  {dailyColleagues[selectedDay].map((colleague, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">
-                      {colleague}
-                    </span>
-                  ))}
+            {dailyColleagues[selectedDay] &&
+              dailyColleagues[selectedDay].length > 0 && (
+                <div>
+                  <p className="text-sm text-slate-600 mb-2">
+                    함께 일하는 사람
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {dailyColleagues[selectedDay].map((colleague, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
+                      >
+                        {colleague}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }
